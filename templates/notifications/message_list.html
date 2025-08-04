@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Сообщения - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Сообщения</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{% url 'message_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus"></i> Создать сообщение
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        {% if page_obj %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Тема</th>
+                            <th>Автор</th>
+                            <th>Получатели</th>
+                            <th>Способы доставки</th>
+                            <th>Статус</th>
+                            <th>Создано</th>
+                            <th>Отправлено</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in page_obj %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">{{ message.title }}</div>
+                                    <div class="text-muted small">{{ message.content|truncatechars:50 }}</div>
+                                </td>
+                                <td>{{ message.created_by.username }}</td>
+                                <td>
+                                    {% if message.send_to_all %}
+                                        <span class="badge bg-info">Все пользователи</span>
+                                    {% else %}
+                                        {% for group in message.target_groups.all %}
+                                            <span class="badge bg-secondary">{{ group.name }}</span>
+                                        {% endfor %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% for method in message.delivery_methods %}
+                                        {% if method == 'email' %}
+                                            <i class="bi bi-envelope text-primary" title="Email"></i>
+                                        {% elif method == 'sms' %}
+                                            <i class="bi bi-phone text-success" title="SMS"></i>
+                                        {% elif method == 'telegram' %}
+                                            <i class="bi bi-telegram text-info" title="Telegram"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    {% if message.is_sent %}
+                                        <span class="badge bg-success">Отправлено</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">Не отправлено</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ message.created_at|date:"d.m.Y H:i" }}</td>
+                                <td>
+                                    {% if message.sent_at %}
+                                        {{ message.sent_at|date:"d.m.Y H:i" }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if not message.is_sent %}
+                                        <a href="{% url 'message_send' message.id %}" class="btn btn-sm btn-success">
+                                            <i class="bi bi-send"></i> Отправить
+                                        </a>
+                                    {% else %}
+                                        <span class="text-muted small">Отправлено</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Пагинация -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Навигация по страницам">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">Первая</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-4">
+                <p class="text-muted">Сообщений пока нет</p>
+                <a href="{% url 'message_create' %}" class="btn btn-primary">Создать первое сообщение</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

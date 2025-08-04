@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Пользователи - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Пользователи</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{% url 'user_create' %}" class="btn btn-primary">
+                <i class="bi bi-plus"></i> Добавить пользователя
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Фильтры -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="search" class="form-label">Поиск</label>
+                <input type="text" class="form-control" id="search" name="search" 
+                       value="{{ request.GET.search }}" placeholder="Email, телефон, Telegram">
+            </div>
+            <div class="col-md-4">
+                <label for="group" class="form-label">Группа</label>
+                <select class="form-select" id="group" name="group">
+                    <option value="">Все группы</option>
+                    {% for group in groups %}
+                        <option value="{{ group.id }}" {% if request.GET.group == group.id|stringformat:"s" %}selected{% endif %}>
+                            {{ group.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-outline-primary me-2">Фильтровать</button>
+                <a href="{% url 'user_list' %}" class="btn btn-outline-secondary">Сбросить</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Массовые операции -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="post" action="{% url 'bulk_action' %}" id="bulk-form">
+            {% csrf_token %}
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    {{ bulk_form.action|as_crispy_field }}
+                </div>
+                <div class="col-md-3" id="group-field" style="display: none;">
+                    {{ bulk_form.new_group|as_crispy_field }}
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-warning" disabled id="bulk-submit">
+                        Применить к выбранным
+                    </button>
+                </div>
+                <div class="col-md-3">
+                    <span id="selected-count" class="text-muted">Выбрано: 0</span>
+                </div>
+            </div>
+            {{ bulk_form.selected_users }}
+        </form>
+    </div>
+</div>
+
+<!-- Таблица пользователей -->
+<div class="card">
+    <div class="card-body">
+        {% if page_obj %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="select-all" class="form-check-input">
+                            </th>
+                            <th>ID</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Telegram</th>
+                            <th>Группа</th>
+                            <th>Статус</th>
+                            <th>Создан</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in page_obj %}
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="form-check-input user-checkbox" 
+                                           value="{{ user.id }}">
+                                </td>
+                                <td>{{ user.external_id }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone }}</td>
+                                <td>{{ user.telegram }}</td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ user.group.name }}</span>
+                                </td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success">Активен</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Неактивен</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ user.created_at|date:"d.m.Y" }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'user_edit' user.id %}" class="btn btn-outline-primary">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a href="{% url 'user_delete' user.id %}" class="btn btn-outline-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Пагинация -->
+            {% if page_obj.has_other_pages %}
+                <nav aria-label="Навигация по страницам">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.group %}&group={{ request.GET.group }}{% endif %}">Первая</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.group %}&group={{ request.GET.group }}{% endif %}">Предыдущая</a>
+                            </li>
+                        {% endif %}
+
+                        <li class="page-item active">
+                            <span class="page-link">
+                                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                            </span>
+                        </li>
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.group %}&group={{ request.GET.group }}{% endif %}">Следующая</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.group %}&group={{ request.GET.group }}{% endif %}">Последняя</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="text-center py-4">
+                <p class="text-muted">Пользователи не найдены</p>
+                <a href="{% url 'user_create' %}" class="btn btn-primary">Добавить первого пользователя</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('select-all');
+    const userCheckboxes = document.querySelectorAll('.user-checkbox');
+    const selectedCount = document.getElementById('selected-count');
+    const bulkSubmit = document.getElementById('bulk-submit');
+    const actionSelect = document.querySelector('select[name="action"]');
+    const groupField = document.getElementById('group-field');
+    const selectedUsersInput = document.querySelector('input[name="selected_users"]');
+
+    // Обработка выбора всех пользователей
+    selectAll.addEventListener('change', function() {
+        userCheckboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+        updateSelectedCount();
+    });
+
+    // Обработка выбора отдельных пользователей
+    userCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectedCount);
+    });
+
+    // Показ/скрытие поля группы
+    actionSelect.addEventListener('change', function() {
+        if (this.value === 'change_group') {
+            groupField.style.display = 'block';
+        } else {
+            groupField.style.display = 'none';
+        }
+    });
+
+    // Обработка отправки формы массовых операций
+    document.getElementById('bulk-form').addEventListener('submit', function(e) {
+        const selected = Array.from(userCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        
+        if (selected.length === 0) {
+            e.preventDefault();
+            alert('Выберите хотя бы одного пользователя');
+            return;
+        }
+
+        selectedUsersInput.value = selected.join(',');
+        
+        if (!confirm(`Применить действие к ${selected.length} пользователям?`)) {
+            e.preventDefault();
+        }
+    });
+
+    function updateSelectedCount() {
+        const selected = Array.from(userCheckboxes).filter(cb => cb.checked);
+        selectedCount.textContent = `Выбрано: ${selected.length}`;
+        bulkSubmit.disabled = selected.length === 0;
+        
+        // Обновляем состояние "Выбрать все"
+        if (selected.length === 0) {
+            selectAll.indeterminate = false;
+            selectAll.checked = false;
+        } else if (selected.length === userCheckboxes.length) {
+            selectAll.indeterminate = false;
+            selectAll.checked = true;
+        } else {
+            selectAll.indeterminate = true;
+        }
+    }
+});
+</script>
+{% endblock %}

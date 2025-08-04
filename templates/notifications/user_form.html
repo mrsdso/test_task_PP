@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'user_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.external_id|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.group|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.phone|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.telegram|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                {{ form.is_active }}
+                                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                    {{ form.is_active.label }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Сохранить
+                        </button>
+                        <a href="{% url 'user_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-lg"></i> Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Справка</h6>
+            </div>
+            <div class="card-body">
+                <h6>Формат данных:</h6>
+                <ul class="small">
+                    <li><strong>ID:</strong> Уникальный числовой идентификатор</li>
+                    <li><strong>Email:</strong> Действующий email адрес</li>
+                    <li><strong>Телефон:</strong> В формате +1234567890</li>
+                    <li><strong>Telegram:</strong> Username (с @ или без)</li>
+                </ul>
+                
+                <h6 class="mt-3">Группы:</h6>
+                <p class="small text-muted">
+                    Группы используются для таргетированной отправки уведомлений. 
+                    Если нужной группы нет, создайте её в разделе "Группы".
+                </p>
+                
+                {% if user %}
+                    <hr>
+                    <h6>Информация:</h6>
+                    <p class="small">
+                        <strong>Создан:</strong> {{ user.created_at|date:"d.m.Y H:i" }}<br>
+                        <strong>Обновлен:</strong> {{ user.updated_at|date:"d.m.Y H:i" }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

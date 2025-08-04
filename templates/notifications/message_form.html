@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ title }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'message_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post" id="message-form">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.title|as_crispy_field }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.content|as_crispy_field }}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Способы доставки</label>
+                                <div class="form-check">
+                                    {{ form.delivery_methods.0.tag }}
+                                    <label class="form-check-label" for="{{ form.delivery_methods.0.id_for_label }}">
+                                        <i class="bi bi-envelope"></i> {{ form.delivery_methods.0.choice_label }}
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    {{ form.delivery_methods.1.tag }}
+                                    <label class="form-check-label" for="{{ form.delivery_methods.1.id_for_label }}">
+                                        <i class="bi bi-phone"></i> {{ form.delivery_methods.1.choice_label }}
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    {{ form.delivery_methods.2.tag }}
+                                    <label class="form-check-label" for="{{ form.delivery_methods.2.id_for_label }}">
+                                        <i class="bi bi-telegram"></i> {{ form.delivery_methods.2.choice_label }}
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <div class="form-check mb-3">
+                                    {{ form.send_to_all }}
+                                    <label class="form-check-label" for="{{ form.send_to_all.id_for_label }}">
+                                        {{ form.send_to_all.label }}
+                                    </label>
+                                </div>
+                                
+                                <div id="target-groups" style="display: none;">
+                                    <label class="form-label">Целевые группы</label>
+                                    {% for group in form.target_groups %}
+                                        <div class="form-check">
+                                            {{ group.tag }}
+                                            <label class="form-check-label" for="{{ group.id_for_label }}">
+                                                {{ group.choice_label }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg"></i> Создать сообщение
+                        </button>
+                        <a href="{% url 'message_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-lg"></i> Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Справка</h6>
+            </div>
+            <div class="card-body">
+                <h6>Способы доставки:</h6>
+                <ul class="small">
+                    <li><strong>Email:</strong> Отправка на email адрес</li>
+                    <li><strong>SMS:</strong> Отправка SMS на телефон</li>
+                    <li><strong>Telegram:</strong> Отправка в Telegram</li>
+                </ul>
+                <p class="small text-muted">
+                    Выберите несколько способов для резервирования - если один не сработает, 
+                    система попробует другой.
+                </p>
+                
+                <h6 class="mt-3">Целевая аудитория:</h6>
+                <p class="small text-muted">
+                    Либо отправьте всем активным пользователям, либо выберите конкретные группы.
+                </p>
+                
+                <div class="alert alert-info small">
+                    <i class="bi bi-info-circle"></i>
+                    После создания сообщения вы сможете просмотреть список получателей 
+                    перед отправкой.
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Предварительный просмотр</h6>
+            </div>
+            <div class="card-body">
+                <div id="preview-title" class="fw-bold mb-2">Тема сообщения</div>
+                <div id="preview-content" class="text-muted">Текст сообщения</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sendToAllCheckbox = document.getElementById('{{ form.send_to_all.id_for_label }}');
+    const targetGroupsDiv = document.getElementById('target-groups');
+    const titleInput = document.getElementById('{{ form.title.id_for_label }}');
+    const contentInput = document.getElementById('{{ form.content.id_for_label }}');
+    const previewTitle = document.getElementById('preview-title');
+    const previewContent = document.getElementById('preview-content');
+
+    // Показ/скрытие выбора групп
+    function toggleTargetGroups() {
+        if (sendToAllCheckbox.checked) {
+            targetGroupsDiv.style.display = 'none';
+        } else {
+            targetGroupsDiv.style.display = 'block';
+        }
+    }
+
+    sendToAllCheckbox.addEventListener('change', toggleTargetGroups);
+    toggleTargetGroups(); // Инициализация
+
+    // Предварительный просмотр
+    function updatePreview() {
+        previewTitle.textContent = titleInput.value || 'Тема сообщения';
+        previewContent.textContent = contentInput.value || 'Текст сообщения';
+    }
+
+    titleInput.addEventListener('input', updatePreview);
+    contentInput.addEventListener('input', updatePreview);
+});
+</script>
+{% endblock %}

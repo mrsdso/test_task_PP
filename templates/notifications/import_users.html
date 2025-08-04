@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Импорт пользователей - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Импорт пользователей</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'user_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к пользователям
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Загрузка JSON файла</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.json_file|as_crispy_field }}
+                        <div class="form-text">
+                            Выберите JSON файл с данными пользователей. Файл должен соответствовать требуемому формату.
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-upload"></i> Импортировать пользователей
+                        </button>
+                        <a href="{% url 'user_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-x-lg"></i> Отмена
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Формат JSON файла</h6>
+            </div>
+            <div class="card-body">
+                <p class="small">JSON файл должен содержать массив объектов со следующими полями:</p>
+                
+                <pre class="bg-light p-2 small"><code>[
+  {
+    "id": 1,
+    "email": "user@example.com",
+    "phone": "+1234567890",
+    "telegram": "@username",
+    "group": "admins"
+  },
+  ...
+]</code></pre>
+                
+                <h6 class="mt-3">Описание полей:</h6>
+                <ul class="small">
+                    <li><code>id</code> - уникальный числовой ID</li>
+                    <li><code>email</code> - email адрес пользователя</li>
+                    <li><code>phone</code> - номер телефона</li>
+                    <li><code>telegram</code> - Telegram username</li>
+                    <li><code>group</code> - название группы</li>
+                </ul>
+                
+                <div class="alert alert-info small mt-3">
+                    <i class="bi bi-info-circle"></i>
+                    Группы будут созданы автоматически, если их не существует.
+                </div>
+                
+                <div class="alert alert-warning small">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    Существующие пользователи будут обновлены по ID.
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Пример файла</h6>
+            </div>
+            <div class="card-body">
+                <p class="small">В проекте уже есть файл <code>users_data.json</code> с примером данных.</p>
+                <p class="small">Вы можете использовать его как шаблон для создания своего файла.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

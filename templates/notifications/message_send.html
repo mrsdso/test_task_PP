@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Отправка сообщения - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Отправка сообщения</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{% url 'message_list' %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Предварительный просмотр</h5>
+            </div>
+            <div class="card-body">
+                <h6><strong>Тема:</strong> {{ message.title }}</h6>
+                <div class="mt-3">
+                    <strong>Содержание:</strong>
+                    <div class="border p-3 mt-2 bg-light">
+                        {{ message.content|linebreaks }}
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>Способы доставки:</h6>
+                        <ul class="list-unstyled">
+                            {% for method in message.delivery_methods %}
+                                <li>
+                                    {% if method == 'email' %}
+                                        <i class="bi bi-envelope text-primary"></i> Email
+                                    {% elif method == 'sms' %}
+                                        <i class="bi bi-phone text-success"></i> SMS
+                                    {% elif method == 'telegram' %}
+                                        <i class="bi bi-telegram text-info"></i> Telegram
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Получатели:</h6>
+                        <p class="text-muted">
+                            {% if message.send_to_all %}
+                                Все активные пользователи
+                            {% else %}
+                                Группы: 
+                                {% for group in message.target_groups.all %}
+                                    <span class="badge bg-secondary">{{ group.name }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </p>
+                        <p><strong>Всего получателей: {{ total_recipients }}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-body text-center">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="bi bi-send"></i> Отправить сообщение
+                    </button>
+                    <a href="{% url 'message_list' %}" class="btn btn-secondary btn-lg ms-3">
+                        <i class="bi bi-x-lg"></i> Отмена
+                    </a>
+                </form>
+                
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Внимание!</strong> После отправки сообщение нельзя будет изменить или отозвать.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Список получателей</h6>
+            </div>
+            <div class="card-body">
+                {% if total_recipients > 0 %}
+                    <div class="small" style="max-height: 400px; overflow-y: auto;">
+                        {% for user in target_users %}
+                            <div class="border-bottom py-2">
+                                <div class="fw-bold">{{ user.external_id }}</div>
+                                <div class="text-muted small">
+                                    {{ user.email }}<br>
+                                    {{ user.phone }}<br>
+                                    {{ user.telegram }}
+                                </div>
+                                <span class="badge bg-secondary">{{ user.group.name }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Нет активных получателей</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Информация о доставке</h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted">
+                    Система попытается доставить сообщение каждому пользователю, используя 
+                    выбранные способы доставки в указанном порядке.
+                </p>
+                <p class="small text-muted">
+                    Если первый способ не сработает (например, неверный email), 
+                    система автоматически попробует следующий способ.
+                </p>
+                <p class="small text-muted">
+                    Результаты доставки будут сохранены в логах и в отдельном файле с 
+                    текущей датой и временем.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

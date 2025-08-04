@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Главная - {{ block.super }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Панель управления</h1>
+</div>
+
+<!-- Статистика -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Активных пользователей
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_users }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-people fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Групп
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_groups }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-collection fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Всего сообщений
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_messages }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-chat-dots fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Быстрые действия
+                        </div>
+                        <a href="{% url 'message_create' %}" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus"></i> Новое сообщение
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Последние сообщения и логи -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Последние сообщения</h6>
+                <a href="{% url 'message_list' %}" class="btn btn-sm btn-outline-primary">Все сообщения</a>
+            </div>
+            <div class="card-body">
+                {% if recent_messages %}
+                    <div class="list-group">
+                        {% for message in recent_messages %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">{{ message.title }}</h6>
+                                    <small class="text-muted">{{ message.created_at|date:"d.m.Y H:i" }}</small>
+                                </div>
+                                <p class="mb-1">{{ message.content|truncatechars:100 }}</p>
+                                <small class="text-muted">
+                                    Автор: {{ message.created_by.username }}
+                                    {% if message.is_sent %}
+                                        <span class="badge bg-success ms-2">Отправлено</span>
+                                    {% else %}
+                                        <span class="badge bg-warning ms-2">Не отправлено</span>
+                                    {% endif %}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Сообщений пока нет</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Последние логи</h6>
+                <a href="{% url 'logs' %}" class="btn btn-sm btn-outline-primary">Все логи</a>
+            </div>
+            <div class="card-body">
+                {% if recent_logs %}
+                    <div class="list-group">
+                        {% for log in recent_logs %}
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <span>
+                                        Пользователь {{ log.user.external_id }}
+                                        <span class="badge bg-secondary">{{ log.delivery_method }}</span>
+                                    </span>
+                                    <small class="text-muted">{{ log.sent_at|date:"d.m.Y H:i" }}</small>
+                                </div>
+                                <small class="text-muted">
+                                    {% if log.status == 'success' %}
+                                        <span class="badge bg-success">Успешно</span>
+                                    {% elif log.status == 'failed' %}
+                                        <span class="badge bg-danger">Неудачно</span>
+                                    {% else %}
+                                        <span class="badge bg-warning">{{ log.status }}</span>
+                                    {% endif %}
+                                    - {{ log.message.title|truncatechars:50 }}
+                                </small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Логов пока нет</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

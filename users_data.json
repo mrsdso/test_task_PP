@@ -1,0 +1,702 @@
+[
+  {
+    "id": 1,
+    "email": "user1@example.com",
+    "phone": "+1234567801",
+    "telegram": "@user1",
+    "group": "admins"
+  },
+  {
+    "id": 2,
+    "email": "user2@example.com",
+    "phone": "+1234567802",
+    "telegram": "@user2",
+    "group": "managers"
+  },
+  {
+    "id": 3,
+    "email": "user3@example.com",
+    "phone": "+1234567803",
+    "telegram": "@user3",
+    "group": "employees"
+  },
+  {
+    "id": 4,
+    "email": "user4@example.com",
+    "phone": "+1234567804",
+    "telegram": "@user4",
+    "group": "admins"
+  },
+  {
+    "id": 5,
+    "email": "user5@example.com",
+    "phone": "+1234567805",
+    "telegram": "@user5",
+    "group": "managers"
+  },
+  {
+    "id": 6,
+    "email": "user6@example.com",
+    "phone": "+1234567806",
+    "telegram": "@user6",
+    "group": "employees"
+  },
+  {
+    "id": 7,
+    "email": "user7@example.com",
+    "phone": "+1234567807",
+    "telegram": "@user7",
+    "group": "admins"
+  },
+  {
+    "id": 8,
+    "email": "user8@example.com",
+    "phone": "+1234567808",
+    "telegram": "@user8",
+    "group": "managers"
+  },
+  {
+    "id": 9,
+    "email": "user9@example.com",
+    "phone": "+1234567809",
+    "telegram": "@user9",
+    "group": "employees"
+  },
+  {
+    "id": 10,
+    "email": "user10@example.com",
+    "phone": "+1234567810",
+    "telegram": "@user10",
+    "group": "admins"
+  },
+  {
+    "id": 11,
+    "email": "user11@example.com",
+    "phone": "+1234567811",
+    "telegram": "@user11",
+    "group": "managers"
+  },
+  {
+    "id": 12,
+    "email": "user12@example.com",
+    "phone": "+1234567812",
+    "telegram": "@user12",
+    "group": "employees"
+  },
+  {
+    "id": 13,
+    "email": "user13@example.com",
+    "phone": "+1234567813",
+    "telegram": "@user13",
+    "group": "admins"
+  },
+  {
+    "id": 14,
+    "email": "user14@example.com",
+    "phone": "+1234567814",
+    "telegram": "@user14",
+    "group": "managers"
+  },
+  {
+    "id": 15,
+    "email": "user15@example.com",
+    "phone": "+1234567815",
+    "telegram": "@user15",
+    "group": "employees"
+  },
+  {
+    "id": 16,
+    "email": "user16@example.com",
+    "phone": "+1234567816",
+    "telegram": "@user16",
+    "group": "admins"
+  },
+  {
+    "id": 17,
+    "email": "user17@example.com",
+    "phone": "+1234567817",
+    "telegram": "@user17",
+    "group": "managers"
+  },
+  {
+    "id": 18,
+    "email": "user18@example.com",
+    "phone": "+1234567818",
+    "telegram": "@user18",
+    "group": "employees"
+  },
+  {
+    "id": 19,
+    "email": "user19@example.com",
+    "phone": "+1234567819",
+    "telegram": "@user19",
+    "group": "admins"
+  },
+  {
+    "id": 20,
+    "email": "user20@example.com",
+    "phone": "+1234567820",
+    "telegram": "@user20",
+    "group": "managers"
+  },
+  {
+    "id": 21,
+    "email": "user21@example.com",
+    "phone": "+1234567821",
+    "telegram": "@user21",
+    "group": "employees"
+  },
+  {
+    "id": 22,
+    "email": "user22@example.com",
+    "phone": "+1234567822",
+    "telegram": "@user22",
+    "group": "admins"
+  },
+  {
+    "id": 23,
+    "email": "user23@example.com",
+    "phone": "+1234567823",
+    "telegram": "@user23",
+    "group": "managers"
+  },
+  {
+    "id": 24,
+    "email": "user24@example.com",
+    "phone": "+1234567824",
+    "telegram": "@user24",
+    "group": "employees"
+  },
+  {
+    "id": 25,
+    "email": "user25@example.com",
+    "phone": "+1234567825",
+    "telegram": "@user25",
+    "group": "admins"
+  },
+  {
+    "id": 26,
+    "email": "user26@example.com",
+    "phone": "+1234567826",
+    "telegram": "@user26",
+    "group": "managers"
+  },
+  {
+    "id": 27,
+    "email": "user27@example.com",
+    "phone": "+1234567827",
+    "telegram": "@user27",
+    "group": "employees"
+  },
+  {
+    "id": 28,
+    "email": "user28@example.com",
+    "phone": "+1234567828",
+    "telegram": "@user28",
+    "group": "admins"
+  },
+  {
+    "id": 29,
+    "email": "user29@example.com",
+    "phone": "+1234567829",
+    "telegram": "@user29",
+    "group": "managers"
+  },
+  {
+    "id": 30,
+    "email": "user30@example.com",
+    "phone": "+1234567830",
+    "telegram": "@user30",
+    "group": "employees"
+  },
+  {
+    "id": 31,
+    "email": "user31@example.com",
+    "phone": "+1234567831",
+    "telegram": "@user31",
+    "group": "admins"
+  },
+  {
+    "id": 32,
+    "email": "user32@example.com",
+    "phone": "+1234567832",
+    "telegram": "@user32",
+    "group": "managers"
+  },
+  {
+    "id": 33,
+    "email": "user33@example.com",
+    "phone": "+1234567833",
+    "telegram": "@user33",
+    "group": "employees"
+  },
+  {
+    "id": 34,
+    "email": "user34@example.com",
+    "phone": "+1234567834",
+    "telegram": "@user34",
+    "group": "admins"
+  },
+  {
+    "id": 35,
+    "email": "user35@example.com",
+    "phone": "+1234567835",
+    "telegram": "@user35",
+    "group": "managers"
+  },
+  {
+    "id": 36,
+    "email": "user36@example.com",
+    "phone": "+1234567836",
+    "telegram": "@user36",
+    "group": "employees"
+  },
+  {
+    "id": 37,
+    "email": "user37@example.com",
+    "phone": "+1234567837",
+    "telegram": "@user37",
+    "group": "admins"
+  },
+  {
+    "id": 38,
+    "email": "user38@example.com",
+    "phone": "+1234567838",
+    "telegram": "@user38",
+    "group": "managers"
+  },
+  {
+    "id": 39,
+    "email": "user39@example.com",
+    "phone": "+1234567839",
+    "telegram": "@user39",
+    "group": "employees"
+  },
+  {
+    "id": 40,
+    "email": "user40@example.com",
+    "phone": "+1234567840",
+    "telegram": "@user40",
+    "group": "admins"
+  },
+  {
+    "id": 41,
+    "email": "user41@example.com",
+    "phone": "+1234567841",
+    "telegram": "@user41",
+    "group": "managers"
+  },
+  {
+    "id": 42,
+    "email": "user42@example.com",
+    "phone": "+1234567842",
+    "telegram": "@user42",
+    "group": "employees"
+  },
+  {
+    "id": 43,
+    "email": "user43@example.com",
+    "phone": "+1234567843",
+    "telegram": "@user43",
+    "group": "admins"
+  },
+  {
+    "id": 44,
+    "email": "user44@example.com",
+    "phone": "+1234567844",
+    "telegram": "@user44",
+    "group": "managers"
+  },
+  {
+    "id": 45,
+    "email": "user45@example.com",
+    "phone": "+1234567845",
+    "telegram": "@user45",
+    "group": "employees"
+  },
+  {
+    "id": 46,
+    "email": "user46@example.com",
+    "phone": "+1234567846",
+    "telegram": "@user46",
+    "group": "admins"
+  },
+  {
+    "id": 47,
+    "email": "user47@example.com",
+    "phone": "+1234567847",
+    "telegram": "@user47",
+    "group": "managers"
+  },
+  {
+    "id": 48,
+    "email": "user48@example.com",
+    "phone": "+1234567848",
+    "telegram": "@user48",
+    "group": "employees"
+  },
+  {
+    "id": 49,
+    "email": "user49@example.com",
+    "phone": "+1234567849",
+    "telegram": "@user49",
+    "group": "admins"
+  },
+  {
+    "id": 50,
+    "email": "user50@example.com",
+    "phone": "+1234567850",
+    "telegram": "@user50",
+    "group": "managers"
+  },
+  {
+    "id": 51,
+    "email": "user51@example.com",
+    "phone": "+1234567851",
+    "telegram": "@user51",
+    "group": "employees"
+  },
+  {
+    "id": 52,
+    "email": "user52@example.com",
+    "phone": "+1234567852",
+    "telegram": "@user52",
+    "group": "admins"
+  },
+  {
+    "id": 53,
+    "email": "user53@example.com",
+    "phone": "+1234567853",
+    "telegram": "@user53",
+    "group": "managers"
+  },
+  {
+    "id": 54,
+    "email": "user54@example.com",
+    "phone": "+1234567854",
+    "telegram": "@user54",
+    "group": "employees"
+  },
+  {
+    "id": 55,
+    "email": "user55@example.com",
+    "phone": "+1234567855",
+    "telegram": "@user55",
+    "group": "admins"
+  },
+  {
+    "id": 56,
+    "email": "user56@example.com",
+    "phone": "+1234567856",
+    "telegram": "@user56",
+    "group": "managers"
+  },
+  {
+    "id": 57,
+    "email": "user57@example.com",
+    "phone": "+1234567857",
+    "telegram": "@user57",
+    "group": "employees"
+  },
+  {
+    "id": 58,
+    "email": "user58@example.com",
+    "phone": "+1234567858",
+    "telegram": "@user58",
+    "group": "admins"
+  },
+  {
+    "id": 59,
+    "email": "user59@example.com",
+    "phone": "+1234567859",
+    "telegram": "@user59",
+    "group": "managers"
+  },
+  {
+    "id": 60,
+    "email": "user60@example.com",
+    "phone": "+1234567860",
+    "telegram": "@user60",
+    "group": "employees"
+  },
+  {
+    "id": 61,
+    "email": "user61@example.com",
+    "phone": "+1234567861",
+    "telegram": "@user61",
+    "group": "admins"
+  },
+  {
+    "id": 62,
+    "email": "user62@example.com",
+    "phone": "+1234567862",
+    "telegram": "@user62",
+    "group": "managers"
+  },
+  {
+    "id": 63,
+    "email": "user63@example.com",
+    "phone": "+1234567863",
+    "telegram": "@user63",
+    "group": "employees"
+  },
+  {
+    "id": 64,
+    "email": "user64@example.com",
+    "phone": "+1234567864",
+    "telegram": "@user64",
+    "group": "admins"
+  },
+  {
+    "id": 65,
+    "email": "user65@example.com",
+    "phone": "+1234567865",
+    "telegram": "@user65",
+    "group": "managers"
+  },
+  {
+    "id": 66,
+    "email": "user66@example.com",
+    "phone": "+1234567866",
+    "telegram": "@user66",
+    "group": "employees"
+  },
+  {
+    "id": 67,
+    "email": "user67@example.com",
+    "phone": "+1234567867",
+    "telegram": "@user67",
+    "group": "admins"
+  },
+  {
+    "id": 68,
+    "email": "user68@example.com",
+    "phone": "+1234567868",
+    "telegram": "@user68",
+    "group": "managers"
+  },
+  {
+    "id": 69,
+    "email": "user69@example.com",
+    "phone": "+1234567869",
+    "telegram": "@user69",
+    "group": "employees"
+  },
+  {
+    "id": 70,
+    "email": "user70@example.com",
+    "phone": "+1234567870",
+    "telegram": "@user70",
+    "group": "admins"
+  },
+  {
+    "id": 71,
+    "email": "user71@example.com",
+    "phone": "+1234567871",
+    "telegram": "@user71",
+    "group": "managers"
+  },
+  {
+    "id": 72,
+    "email": "user72@example.com",
+    "phone": "+1234567872",
+    "telegram": "@user72",
+    "group": "employees"
+  },
+  {
+    "id": 73,
+    "email": "user73@example.com",
+    "phone": "+1234567873",
+    "telegram": "@user73",
+    "group": "admins"
+  },
+  {
+    "id": 74,
+    "email": "user74@example.com",
+    "phone": "+1234567874",
+    "telegram": "@user74",
+    "group": "managers"
+  },
+  {
+    "id": 75,
+    "email": "user75@example.com",
+    "phone": "+1234567875",
+    "telegram": "@user75",
+    "group": "employees"
+  },
+  {
+    "id": 76,
+    "email": "user76@example.com",
+    "phone": "+1234567876",
+    "telegram": "@user76",
+    "group": "admins"
+  },
+  {
+    "id": 77,
+    "email": "user77@example.com",
+    "phone": "+1234567877",
+    "telegram": "@user77",
+    "group": "managers"
+  },
+  {
+    "id": 78,
+    "email": "user78@example.com",
+    "phone": "+1234567878",
+    "telegram": "@user78",
+    "group": "employees"
+  },
+  {
+    "id": 79,
+    "email": "user79@example.com",
+    "phone": "+1234567879",
+    "telegram": "@user79",
+    "group": "admins"
+  },
+  {
+    "id": 80,
+    "email": "user80@example.com",
+    "phone": "+1234567880",
+    "telegram": "@user80",
+    "group": "managers"
+  },
+  {
+    "id": 81,
+    "email": "user81@example.com",
+    "phone": "+1234567881",
+    "telegram": "@user81",
+    "group": "employees"
+  },
+  {
+    "id": 82,
+    "email": "user82@example.com",
+    "phone": "+1234567882",
+    "telegram": "@user82",
+    "group": "admins"
+  },
+  {
+    "id": 83,
+    "email": "user83@example.com",
+    "phone": "+1234567883",
+    "telegram": "@user83",
+    "group": "managers"
+  },
+  {
+    "id": 84,
+    "email": "user84@example.com",
+    "phone": "+1234567884",
+    "telegram": "@user84",
+    "group": "employees"
+  },
+  {
+    "id": 85,
+    "email": "user85@example.com",
+    "phone": "+1234567885",
+    "telegram": "@user85",
+    "group": "admins"
+  },
+  {
+    "id": 86,
+    "email": "user86@example.com",
+    "phone": "+1234567886",
+    "telegram": "@user86",
+    "group": "managers"
+  },
+  {
+    "id": 87,
+    "email": "user87@example.com",
+    "phone": "+1234567887",
+    "telegram": "@user87",
+    "group": "employees"
+  },
+  {
+    "id": 88,
+    "email": "user88@example.com",
+    "phone": "+1234567888",
+    "telegram": "@user88",
+    "group": "admins"
+  },
+  {
+    "id": 89,
+    "email": "user89@example.com",
+    "phone": "+1234567889",
+    "telegram": "@user89",
+    "group": "managers"
+  },
+  {
+    "id": 90,
+    "email": "user90@example.com",
+    "phone": "+1234567890",
+    "telegram": "@user90",
+    "group": "employees"
+  },
+  {
+    "id": 91,
+    "email": "user91@example.com",
+    "phone": "+1234567891",
+    "telegram": "@user91",
+    "group": "admins"
+  },
+  {
+    "id": 92,
+    "email": "user92@example.com",
+    "phone": "+1234567892",
+    "telegram": "@user92",
+    "group": "managers"
+  },
+  {
+    "id": 93,
+    "email": "user93@example.com",
+    "phone": "+1234567893",
+    "telegram": "@user93",
+    "group": "employees"
+  },
+  {
+    "id": 94,
+    "email": "user94@example.com",
+    "phone": "+1234567894",
+    "telegram": "@user94",
+    "group": "admins"
+  },
+  {
+    "id": 95,
+    "email": "user95@example.com",
+    "phone": "+1234567895",
+    "telegram": "@user95",
+    "group": "managers"
+  },
+  {
+    "id": 96,
+    "email": "user96@example.com",
+    "phone": "+1234567896",
+    "telegram": "@user96",
+    "group": "employees"
+  },
+  {
+    "id": 97,
+    "email": "user97@example.com",
+    "phone": "+1234567897",
+    "telegram": "@user97",
+    "group": "admins"
+  },
+  {
+    "id": 98,
+    "email": "user98@example.com",
+    "phone": "+1234567898",
+    "telegram": "@user98",
+    "group": "managers"
+  },
+  {
+    "id": 99,
+    "email": "user99@example.com",
+    "phone": "+1234567899",
+    "telegram": "@user99",
+    "group": "employees"
+  },
+  {
+    "id": 100,
+    "email": "user100@example.com",
+    "phone": "+1234567800",
+    "telegram": "@user100",
+    "group": "admins"
+  }
+]
