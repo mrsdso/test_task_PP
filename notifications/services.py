@@ -10,9 +10,112 @@ from telegram.error import TelegramError
 from typing import Dict, List, Tuple
 import asyncio
 from datetime import datetime
+import threading
+import time
 
 
 logger = logging.getLogger(__name__)
+
+
+class TelegramChatIdCollector:
+    """Сервис для автоматического сбора chat_id пользователей"""
+    
+    def __init__(self):
+        self.bot_token = getattr(settings, 'TELEGRAM_BOT_TOKEN', '')
+        self.running = False
+        self.thread = None
+        self.last_update_id = None
+    
+    def start_collecting(self):
+        """Запустить сбор chat_id в фоновом режиме"""
+        if self.running or not self.bot_token:
+            return
+        
+        self.running = True
+        self.thread = threading.Thread(target=self._collect_loop, daemon=True)
+        self.thread.start()
+        logger.info("Telegram chat_id collector запущен")
+    
+    def stop_collecting(self):
+        """Остановить сбор"""
+        self.running = False
+        if self.thread:
+            self.thread.join(timeout=5)
+        logger.info("Telegram chat_id collector остановлен")
+    
+    def _collect_loop(self):
+        """Основной цикл сбора обновлений"""
+        while self.running:
+            try:
+                self._process_updates()
+                time.sleep(5)  # Проверяем каждые 5 секунд
+            except Exception as e:
+                logger.error(f"Ошибка в сборе chat_id: {e}")
+                time.sleep(10)  # При ошибке ждем дольше
+    
+    def _process_updates(self):
+        """Обработать новые сообщения"""
+        try:
+            url = f"https://api.telegram.org/bot{self.bot_token}/getUpdates"
+            params = {}
+            
+            if self.last_update_id:
+                params['offset'] = self.last_update_id + 1
+            
+            response = requests.get(url, params=params, timeout=10)
+            
+            if response.status_code != 200:
+                return
+            
+            data = response.json()
+            if not data.get('ok'):
+                return
+            
+            updates = data.get('result', [])
+            
+            for update in updates:
+                self.last_update_id = update.get('update_id')
+                self._process_single_update(update)
+                
+        except Exception as e:
+            logger.error(f"Ошибка обработки обновлений: {e}")
+    
+    def _process_single_update(self, update):
+        """Обработать одно обновление"""
+        try:
+            if 'message' not in update:
+                return
+            
+            message = update['message']
+            chat = message.get('chat', {})
+            chat_id = chat.get('id')
+            username = chat.get('username', '')
+            
+            if not chat_id:
+                return
+            
+            # Ищем пользователя по username
+            if username:
+                from .models import NotificationUser
+                from django.db import models
+                
+                users = NotificationUser.objects.filter(
+                    models.Q(telegram=f"@{username}") | 
+                    models.Q(telegram=username)
+                )
+                
+                for user in users:
+                    if user.telegram_chat_id != chat_id:
+                        user.telegram_chat_id = chat_id
+                        user.save()
+                        logger.info(f"Обновлен chat_id для {user.external_id}: {chat_id}")
+                        
+        except Exception as e:
+            logger.error(f"Ошибка обработки сообщения: {e}")
+
+
+# Глобальный экземпляр коллектора
+telegram_collector = TelegramChatIdCollector()
 
 
 class NotificationService:
@@ -124,21 +227,54 @@ class TelegramService(NotificationService):
             if not self.bot:
                 return False, "Telegram бот не сконфигурирован"
             
-            # Убираем @ из начала если есть
-            chat_id = recipient.lstrip('@')
+            # Если передан username, ищем chat_id в базе
+            if recipient.startswith('@') or not recipient.isdigit():
+                from .models import NotificationUser
+                from django.db import models
+                
+                # Ищем пользователя по telegram username
+                try:
+                    user = NotificationUser.objects.get(
+                        models.Q(telegram=recipient) | 
+                        models.Q(telegram=recipient.lstrip('@'))
+                    )
+                    
+                    if not user.telegram_chat_id:
+                        return False, f"Chat ID не найден для {recipient}. Пользователь должен написать боту."
+                    
+                    chat_id = user.telegram_chat_id
+                    
+                except NotificationUser.DoesNotExist:
+                    return False, f"Пользователь {recipient} не найден в базе данных."
+            else:
+                # Если передан числовой chat_id
+                try:
+                    chat_id = int(recipient)
+                except ValueError:
+                    return False, f"Неверный формат chat_id: {recipient}"
             
             # Формируем полное сообщение
             full_message = f"*{subject}*\n\n{message}" if subject else message
+
+            # Используем синхронную отправку через requests
+            import requests
             
-            # Отправляем синхронно
-            self.bot.send_message(
-                chat_id=chat_id,
-                text=full_message,
-                parse_mode='Markdown'
-            )
+            url = f"https://api.telegram.org/bot{self.bot_token}/sendMessage"
+            data = {
+                'chat_id': chat_id,
+                'text': full_message,
+                'parse_mode': 'Markdown'
+            }
             
-            logger.info(f"Telegram сообщение отправлено успешно на {recipient}")
-            return True, ""
+            response = requests.post(url, json=data)
+            
+            if response.status_code == 200:
+                logger.info(f"Telegram сообщение отправлено успешно на chat_id: {chat_id}")
+                return True, ""
+            else:
+                error_msg = f"Ошибка API Telegram: {response.status_code} - {response.text}"
+                logger.error(error_msg)
+                return False, error_msg
             
         except TelegramError as e:
             error_msg = f"Telegram ошибка: {str(e)}"

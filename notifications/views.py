@@ -1,5 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import logout
+# --- Logout через GET ---
 from django.contrib.auth.decorators import login_required
+
+@login_required
+def custom_logout(request):
+    logout(request)
+    return redirect('/admin/login/')
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse, HttpResponse
 from django.core.paginator import Paginator
@@ -11,6 +20,7 @@ from django.views.generic import View
 from django.utils import timezone
 import json
 import os
+
 from .models import NotificationUser, UserGroup, NotificationMessage, NotificationLog
 from .forms import (
     NotificationUserForm, UserGroupForm, NotificationMessageForm,
@@ -20,7 +30,6 @@ from .services import (
     NotificationDeliveryService, load_users_from_json, 
     save_users_to_json, create_notification_log
 )
-
 
 @login_required
 def dashboard(request):

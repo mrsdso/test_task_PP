@@ -16,11 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from notifications.views import custom_logout
+from django.contrib.auth.views import LoginView
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+path('admin/login/', LoginView.as_view(next_page='/'), name='login'),
+    path('logout/', custom_logout, name='logout'),
     path('', include('notifications.urls')),
 ]
 

@@ -22,6 +22,7 @@ class NotificationUser(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=20)
     telegram = models.CharField(max_length=100)
+    telegram_chat_id = models.BigIntegerField(null=True, blank=True)  # Автоматически собираемый chat_id
     group = models.ForeignKey(UserGroup, on_delete=models.CASCADE, related_name='users')
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
